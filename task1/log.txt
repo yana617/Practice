@@ -1,0 +1,12 @@
+$ git log
+commit 91e199450d1321ebde29f4eca35e198507e1754e (HEAD -> master)
+Author: Yana Sidorova <jana.ru.sidorova@yandex.ru>
+Date:   Wed Feb 7 22:00:06 2018 +0300
+
+    commit status.txt
+
+commit 3e309b3fdbb3ef0303e05ecc2782b78d63b5fea4
+Author: Yana Sidorova <jana.ru.sidorova@yandex.ru>
+Date:   Wed Feb 7 21:53:31 2018 +0300
+
+    add .gitignore
