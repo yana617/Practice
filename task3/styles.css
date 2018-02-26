@@ -208,6 +208,8 @@ header{
 .editDelete{
     display: flex;
     flex-direction: row;
+    align-content: center;
+    justify-content: center;
     width: 15%;
     padding: 3px;
     height: 35px;
@@ -315,6 +317,7 @@ footer{
 .footerText2{display: none;}
 
 @media (max-width: 700px) {
+    .editDelete{width: 17%;}
     .logo{width: 10%;}
     .userName{width: 20%;}
     .addPhoto{width: 60%; justify-content: flex-start;}
