@@ -25,8 +25,8 @@
         <div class="userName">
             <div class="userNameShort">YP</div>
             <div class="userNameFull">YanPark</div>
-            <a class="logOut" href="#">
-                <i class="fa fa-sign-out sign fa-3x" aria-hidden="true"></i>
+            <a class="sign" href="#">
+                <i class="fa fa-sign-out signicon fa-3x" aria-hidden="true"></i>
             </a>
         </div>
     </header>
@@ -34,128 +34,26 @@
         <div class="searchAuthorHashtag">
             <input type="text" maxlength="50" placeholder="Автор" class="inputs">
             <input type="text" maxlength="50" placeholder="Хэштеги" class="inputs">
-
         </div>
-        <div class="searchData">
-            <span class="inputDataText">От: </span>
-            <input type="text" maxlength="20" placeholder="ДД.ММ.ГГ" class="inputs">
-            <span class="inputDataText">До: </span>
-            <input type="text" maxlength="20" placeholder="ДД.ММ.ГГ" class="inputs">
+        <div class="searchDate">
+            <i class="fa fa-calendar fa-2x" aria-hidden="true"></i>
+            <div class="inputDate">
+                <input maxlength="20" type="date">
+            </div>
         </div>
         <button type="submit"></button>
     </div>
     <div class="content">
-        <div class="post">
-            <div class="editDelete">
-                <a class="edit" href="#">
-                    <i class="fa fa-pencil fa-2x" aria-hidden="true"></i>
-                </a>
-                <a class="delete" href="#">
-                    <i class="fa fa-trash-o iDelete fa-2x" aria-hidden="true"></i>
-                </a>
-            </div>
-            <img class="imagePosition" src="img/IMGP2620.jpg" alt="photo">
-            <div class="imageOwnerDataInfo">
-                <span class="userNameLabel">YanPark | 25.02.18</span>
-                <i class="fa fa-heart-o fa-2x" aria-hidden="true">2</i>
-            </div>
-            <div class="imageText">
-                <p>Как красиво! #природа#красота</p>
-            </div>
-        </div>
-        <div class="post">
-            <div class="editDelete">
-                <a class="edit" href="#">
-                    <i class="fa fa-pencil fa-2x" aria-hidden="true"></i>
-                </a>
-                <a class="delete" href="#">
-                    <i class="fa fa-trash-o iDelete fa-2x" aria-hidden="true"></i>
-                </a>
-            </div>
-            <img class="imagePosition" src="img/IMGP2622.jpg" alt="photo">
-            <div class="imageOwnerDataInfo">
-                <span class="userNameLabel">YanPark | 25.02.18</span>
-                <i class="fa fa-heart-o fa-2x">12</i>
-            </div>
-            <div class="imageText">Save homeless dog! You can do it! #help#home#wannahome</div>
-        </div>
-        <div class="post">
-            <div class="editDelete">
-                <a class="edit" href="#">
-                    <i class="fa fa-pencil fa-2x" aria-hidden="true"></i>
-                </a>
-                <a class="delete" href="#">
-                    <i class="fa fa-trash-o iDelete fa-2x" aria-hidden="true"></i>
-                </a>
-            </div>
-            <img class="imagePosition" src="img/IMGP2621.jpg" alt="photo">
-            <div class="imageOwnerDataInfo">
-                <span class="userNameLabel">YanPark | 25.02.18</span>
-                <i class="fa fa-heart-o fa-2x">123</i>
-            </div>
-            <div class="imageText">Милый кот хочет кушать!
-                <br>#спаси_его</div>
-        </div>
-        <div class="post">
-            <div class="editDelete">
-                <a class="edit" href="#">
-                    <i class="fa fa-pencil fa-2x" aria-hidden="true"></i>
-                </a>
-                <a class="delete" href="#">
-                    <i class="fa fa-trash-o iDelete fa-2x" aria-hidden="true"></i>
-                </a>
-            </div>
-            <img class="imagePosition" src="img/IMGP2620.jpg" alt="photo">
-            <div class="imageOwnerDataInfo">
-                <span class="userNameLabel">YanPark | 25.02.18</span>
-                <i class="fa fa-heart-o fa-2x" aria-hidden="true">2</i>
-            </div>
-            <div class="imageText">
-                <p>Как красиво! #природа#красота</p>
-            </div>
-        </div>
-        <div class="post">
-            <div class="editDelete">
-                <a class="edit" href="#">
-                    <i class="fa fa-pencil fa-2x" aria-hidden="true"></i>
-                </a>
-                <a class="delete" href="#">
-                    <i class="fa fa-trash-o iDelete fa-2x" aria-hidden="true"></i>
-                </a>
-            </div>
-            <img class="imagePosition" src="img/IMGP2622.jpg" alt="photo">
-            <div class="imageOwnerDataInfo">
-                <span class="userNameLabel">YanPark | 25.02.18</span>
-                <i class="fa fa-heart-o fa-2x">12</i>
-            </div>
-            <div class="imageText">Save homeless dog! You can do it! #help#home#wannahome</div>
-        </div>
-        <div class="post">
-            <div class="editDelete">
-                <a class="edit" href="#">
-                    <i class="fa fa-pencil fa-2x" aria-hidden="true"></i>
-                </a>
-                <a class="delete" href="#">
-                    <i class="fa fa-trash-o iDelete fa-2x" aria-hidden="true"></i>
-                </a>
-            </div>
-            <img class="imagePosition" src="img/IMGP2621.jpg" alt="photo">
-            <div class="imageOwnerDataInfo">
-                <span class="userNameLabel">YanPark | 25.02.18</span>
-                <i class="fa fa-heart-o fa-2x">123</i>
-            </div>
-            <div class="imageText">Милый кот хочет кушать!
-                <br>#спаси_его</div>
-        </div>
+
     </div>
     <button class="loadMoreButton">Загрузить еще</button>
     <footer>
         <div class="copyright">
             <p>© 2018 PhotoCloud.by</p>
             <p>Последние изменения:
-                <span class=footerText1>25.02.2018</span>
+                <span class=footerText1>11.03.2018</span>
             </p>
-            <p class="footerText2">25.02.2018</p>
+            <p class="footerText2">11.03.2018</p>
         </div>
         <div class="editorInfo">
             <p>Сидорова Яна</p>
@@ -164,5 +62,6 @@
         </div>
     </footer>
 </body>
+<script src="js/dom.js"></script>
 
 </html>
