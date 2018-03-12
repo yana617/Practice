@@ -23,48 +23,56 @@ window.domModul = (function () {
     let user = 'YanPark';
     let content = document.getElementsByClassName("content")[0];
     return {
-        changeUser: function (username) {
-            if (username === null) {
-                user=username;
-                document.getElementsByClassName('sign')[0].innerHTML = '<i class="fa fa-sign-in signicon2 fa-3x" aria-hidden="true"></i>';
-                document.getElementsByClassName('userNameShort')[0].style.display='none';
-                document.getElementsByClassName('userNameFull')[0].style.display='none';
-                document.getElementsByClassName('addPhoto')[0].style.display='none';
-            }
-            else {
-                if(username.length>15) return false;
-                if(user===null) {
-                    document.getElementsByClassName('sign')[0].innerHTML = '<i class="fa fa-sign-out signicon fa-3x" aria-hidden="true"></i>';
-                    document.getElementsByClassName('addPhoto')[0].style.display='flex';
-                }
-                user = username;
-                let nameShort = document.getElementsByClassName('userNameShort')[0];
-                nameShort.style.display='flex';
-                let j = 0; let nameForShort = ""; let pos;
-                if (user.split(' ').length == 1) {
-                    for (let i = 0; i < user.length; i++) {
-                        if (user[i] === user[i].toUpperCase()) {
-                            nameForShort += user[i];
+        makeUserNameShort: function(str){
+                let j = 0; let nameForShort = ""; let pos, middle;
+                middle = parseInt(str.length/2);
+                if (str.split(' ').length == 1) {
+                    for (let i = 0; i < str.length; i++) {
+                        if (str[i] === str[i].toUpperCase()) {
+                            nameForShort += str[i];
                             j++; pos = i;
                             if (j == 2) break;
                         }
                     }
-                    if (j == 2) nameShort.textContent = nameForShort;
+                    if (j == 2) return nameForShort;
                     else {
-                        if (j == 0) nameShort.innerHTML = user[0].toUpperCase() + user[user.length / 2].toUpperCase();
+                        if (j == 0) return (str[0] + str[middle]).toUpperCase();
                         else if (j == 1) {
-                            if (pos != 0) nameShort.innerHTML = user[0].toUpperCase() + user[pos];
-                            else nameShort.innerHTML = user[0] + user[user.length / 2].toUpperCase();
+                            if (pos != 0) return str[0].toUpperCase() + str[pos];
+                            else return str[0] + str[middle].toUpperCase();
                         }
                     }
                 }
                 else {
-                    let userNames = user.split(' ');
-                    nameShort.innerHTML = (userNames[0][0] + userNames[1][0]).toUpperCase();
+                    let userNames = str.split(' ');
+                    return (userNames[0][0] + userNames[1][0]).toUpperCase();
                 }
+        },
+        changeUser: function (username) {
+            if (username === null || typeof username === undefined) {
+                user = username;
+                document.getElementsByClassName('sign')[0].innerHTML = '<i class="fa fa-sign-in signicon2 fa-3x" aria-hidden="true"></i>';
+                document.getElementsByClassName('userNameShort')[0].style.display = 'none';
+                document.getElementsByClassName('userNameFull')[0].style.display = 'none';
+                document.getElementsByClassName('addPhoto')[0].style.display = 'none';
+            }
+            else {
+                if (user === null) {
+                    document.getElementsByClassName('sign')[0].innerHTML = '<i class="fa fa-sign-out signicon fa-3x" aria-hidden="true"></i>';
+                    document.getElementsByClassName('addPhoto')[0].style.display = 'flex';
+                }
+                user = username;
+                let nameShort = document.getElementsByClassName('userNameShort')[0];
+                nameShort.style.display = 'flex';
+                nameShort.textContent = this.makeUserNameShort(user);
                 let nameFull = document.getElementsByClassName('userNameFull')[0];
-                nameFull.style.display='flex';
-                nameFull.innerHTML = user;
+                if(document.body.clientWidth<830) nameFull.style.display='none';
+                else if(user.length>13) {
+                    nameFull.style.display = 'flex'; 
+                    nameFull.style.width = '200px';
+                    nameShort.style.right = '240px';
+                    nameFull.textContent = user;
+                } 
             }
             getPhotoPosts()
             return true;
