@@ -1,0 +1,201 @@
+.add-main-container{
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    padding-top: 70px; 
+    min-height: calc(100vh - 70px);
+    width: 100%;
+}
+
+.add-form{
+    display: flex;
+    align-content: center;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: row;
+    width: 80%;
+    height: 600px;
+    border-radius:20px;
+    border: 2px solid; 
+    padding: 20px;
+    border-color: rgb(112, 112, 175);
+    background-color: rgb(241, 241, 248);
+}
+.photo-form{
+    width: 50%;
+    height: 90%;
+    margin: 10px;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.addphoto-image a{
+    text-decoration-line: none;
+    color: black;
+}
+.addphoto-image{
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    font-size: 35px;
+    font-family: sans-serif;
+    width: 90%;
+    height: 90%;
+    position: relative;
+}
+.addphoto-image-size{
+    max-height: 100%;
+    max-width: 100%;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+.plus{
+    position: absolute;
+    display: block;
+    left: 47%;
+    top: 47%;
+    height: 35px;
+    width: 35px;
+    background-color: rgba(255, 255, 255, 0.6);
+    border-radius: 35px;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+#img-upload{
+    display: none;
+}
+.plus:hover{
+    background-color: rgba(255, 255, 255, 0.9);
+}
+.image-link-input{
+    height: 25px;
+    width: 80%;
+}
+
+.description-form{
+    width: 40%;
+    height: 70%;
+    margin: 10px;
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+.to-do-info{
+    color: purple;
+    font-size: 30px;
+    font-family: 'Playfair Display SC', serif;
+    font-weight: 500;
+    letter-spacing: 1px;
+    color: #222222;
+    margin-bottom: 20px;
+}
+#text-form{
+    width: 90%;
+    border: 2px rgb(14, 190, 235) solid;
+    border-radius: 10px;
+    height: 150px;
+    background-color: white;
+    white-space: pre-wrap;
+    resize: none;
+    padding: 5px;
+    overflow: hidden;
+}
+.submit-button{
+    display: inline-block;
+    line-height: 40px;
+    border-radius: 10px;
+    background: rgb(29, 198, 223);
+    width: 200px;
+    letter-spacing: normal;
+    color: white;
+    text-align: center;
+    outline: none;
+    font-family: Trebuchet MS, Helvetica;
+    font-size: 18px;
+    transition: .4s ease-in-out;
+    text-decoration: none;
+}
+.submit-button:hover{
+    background: rgba(29, 197, 223, 0.568);
+}
+@media(max-width:1000px){
+    .add-form{
+        flex-direction: column;
+    }
+    .photo-form{
+        height: 40%;
+        width: 95%;
+    }
+    .description-form{
+        height: 50%;
+        width: 95%;
+    }
+}
+@media(max-width:600px){
+    .addphoto-image{
+        width: 95%;
+    }
+    .add-form{
+        width: 95%;
+        height: auto;
+    }
+    .description-form{
+        height: 50%;
+    }
+    .to-do-info{
+        margin-bottom: 0px;
+    }
+    .text-form{
+        width: 95%;
+    }
+    .plus{
+        left: 45%;
+        top: 45%;
+    }
+}
+.agreement{
+    z-index: 5;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.541);
+}
+.agreement-block{
+    z-index: 6;
+    height: 150px;
+    width: 300px;
+    padding-bottom: 10px;
+    border: 1px solid gray;
+    border-radius: 20px; 
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+    justify-content: space-around;
+}
+.agreement-block p{
+    font-family: serif;
+    font-size: 20px;
+    text-align: center;
+}
+.agree-button{
+    height: 50px;
+    width: 60%;
+    color: white;
+    background-color: black;
+    border-radius: 10px; 
+}

@@ -1,195 +1,108 @@
-var photoPosts = [
-    {
-        id: '1',
-        description: 'Спать! #сон #cute',
-        createdAt: new Date('2018-03-09T13:41:00'),
-        author: 'CatVlog',
-        photoLink: 'img/IMG1.jpg',
-        likes: ['Bobby', 'HiWorld'],
-        hashtags: ['#сон', '#cute']
-    },
-    {
-        id: '2',
-        description: 'Save homeless dog! You can do it! #help#home#wannahome',
-        createdAt: new Date('2018-03-05T21:00:00'),
-        author: 'KateK',
-        photoLink: 'img/IMGP2622.jpg',
-        likes: ['MarkL', 'Bobby'],
-        hashtags: ['#help', '#home', '#wannahome']
-    },
-    {
-        id: '3',
-        description: 'Как красиво! #природа #красота #мир',
-        createdAt: new Date('2018-03-03T21:00:00'),
-        author: 'YanPark',
-        photoLink: 'img/IMGP2620.jpg',
-        likes: ['MarkL', 'Bobby'],
-        hashtags: ['#природа', '#красота', '#мир']
-    },
-    {
-        id: '4',
-        description: '#кубик',
-        createdAt: new Date('2018-03-02T21:15:00'),
-        author: 'YanPark',
-        photoLink: 'img/IMG2.jpg',
-        likes: ['MишаК'],
-        hashtags: ['#кубик']
-    },
-    {
-        id: '5',
-        description: 'Женская сборная Беларуси выиграла эстафету в рамках соревнований по биатлону на Олимпийских играх в Пхёнчхане!!! #победа',
-        createdAt: new Date('2018-03-01T23:00:00'),
-        author: 'Иванов Иван',
-        photoLink: 'http://ont.by/webroot/delivery/files/news/2018/02/22/Dom.jpg',
-        likes: ['MarkL', 'Bobby'],
-        hashtags: ['#победа']
-    },
+//localStorage.clear();
+if (!localStorage.getItem('posts')) {
+    var photoPosts = [
+        {
+            id: '9',
+            description: 'Спать! #сон #cute',
+            createdAt: new Date('2018-03-09T13:41:00'),
+            author: 'CatVlog',
+            photoLink: 'img/IMG1.jpg',
+            likes: ['Bobby', 'HiWorld'],
+            hashtags: ['#сон', '#cute']
+        },
+        {
+            id: '8',
+            description: 'Wow! #nature',
+            createdAt: new Date('2018-03-07T08:25'),
+            author: 'naturePhoto',
+            photoLink: 'img/IMG4.jpg',
+            likes: ['Bobby', 'MarkK', 'ИванИванов'],
+            hashtags: ['#nature']
+        },
+        {
+            id: '7',
+            description: 'Save homeless dog! You can do it! #help#home#wannahome',
+            createdAt: new Date('2018-03-05T21:00:00'),
+            author: 'KateK',
+            photoLink: 'img/IMGP2622.jpg',
+            likes: ['MarkL', 'Bobby'],
+            hashtags: ['#help', '#home', '#wannahome']
+        },
+        {
+            id: '6',
+            description: 'Как красиво! #природа #красота #мир',
+            createdAt: new Date('2018-03-03T21:00:00'),
+            author: 'YanPark',
+            photoLink: 'img/IMGP2620.jpg',
+            likes: ['MarkL', 'Bobby'],
+            hashtags: ['#природа', '#красота', '#мир']
+        },
+        {
+            id: '5',
+            description: '#кубик',
+            createdAt: new Date('2018-03-02T21:15:00'),
+            author: 'YanPark',
+            photoLink: 'img/IMG2.jpg',
+            likes: ['MишаК'],
+            hashtags: ['#кубик']
+        },
+        {
+            id: '4',
+            description: 'Женская сборная Беларуси выиграла эстафету в рамках соревнований по биатлону на Олимпийских играх в Пхёнчхане!!! #победа',
+            createdAt: new Date('2018-03-01T23:00:00'),
+            author: 'ИвановИван',
+            photoLink: 'http://ont.by/webroot/delivery/files/news/2018/02/22/Dom.jpg',
+            likes: ['MarkL', 'Bobby'],
+            hashtags: ['#победа']
+        },
+        {
+            id: '3',
+            description: 'Милый кот хочет кушать! #спаси_его',
+            createdAt: new Date('2018-02-24T14:15:00'),
+            author: 'ОляМика',
+            photoLink: 'img/IMGP2621.jpg',
+            likes: ['MarkL', 'Bobby'],
+            hashtags: ['#спаси_его']
+        },
+        {
+            id: '2',
+            description: 'Wow! It is so unreal! #reality #nature',
+            createdAt: new Date('2018-02-20T23:45'),
+            author: 'naturePhoto',
+            photoLink: 'img/IMG3.jpg',
+            likes: ['Bobby', 'YanPark', 'ИванИванов'],
+            hashtags: ['#reality', '#nature']
+        },
+        {
+            id: '1',
+            description: '#wings',
+            createdAt: new Date('2018-02-18T13:03'),
+            author: 'Bobby',
+            photoLink: 'img/IMG5.jpg',
+            likes: ['Bobby', 'YanPark', 'ИванИванов', 'MarkK', 'naturePhoto'],
+            hashtags: ['#wings']
+        }
+    ];
+    window.localStorage.setItem('id', 10);
+    window.localStorage.setItem('posts', JSON.stringify(photoPosts));
+}
+var photoPosts = [];
 
-    {
-        id: '6',
-        description: 'Спать! #сон#cute',
-        createdAt: new Date('2018-02-28T21:12:00'),
-        author: 'CatVlog',
-        photoLink: 'img/IMG1.jpg',
-        likes: ['Bobby', 'HiWorld'],
-        hashtags: ['#сон', '#cute']
-    },
-    {
-        id: '7',
-        description: 'Save homeless dog! You can do it! #help#home#wannahome',
-        createdAt: new Date('2018-02-27T21:00:00'),
-        author: 'Ki North',
-        photoLink: 'img/IMGP2622.jpg',
-        likes: ['MarkL', 'Bobby'],
-        hashtags: ['#help', '#home', '#wannahome']
-    },
-    {
-        id: '8',
-        description: 'Милый кот хочет кушать! #спаси_его',
-        createdAt: new Date('2018-02-24T14:15:00'),
-        author: 'Оля Мика',
-        photoLink: 'img/IMGP2621.jpg',
-        likes: ['MarkL', 'Bobby'],
-        hashtags: ['#спаси_его']
-    },
-    {
-        id: '9',
-        description: 'Женская сборная Беларуси выиграла эстафету в рамках соревнований по биатлону на Олимпийских играх в Пхёнчхане!!! #победа',
-        createdAt: new Date('2018-02-22T23:15:00'),
-        author: 'Иванов Иван',
-        photoLink: 'http://ont.by/webroot/delivery/files/news/2018/02/22/Dom.jpg',
-        likes: ['MarkL', 'Bobby', 'YanPark'],
-        hashtags: ['#победа']
-    },
-    {
-        id: '10',
-        description: 'Милый кот хочет кушать! #спаси_его',
-        createdAt: new Date('2018-02-20T14:15:00'),
-        author: 'Оля Мика',
-        photoLink: 'img/IMGP2621.jpg',
-        likes: ['MarkL', 'Bobby'],
-        hashtags: ['#спаси_его']
-    },
-    {
-        id: '11',
-        description: '#кубик',
-        createdAt: new Date('2018-02-20T12:35:00'),
-        author: 'YanPark',
-        photoLink: 'img/IMG2.jpg',
-        likes: ['MишаК'],
-        hashtags: ['#кубик']
-    },
-    {
-        id: '12',
-        description: 'Save homeless dog! You can do it! #help#home#wannahome',
-        createdAt: new Date('2018-02-19T21:00:00'),
-        author: 'Ki North',
-        photoLink: 'img/IMGP2622.jpg',
-        likes: ['MarkL', 'Bobby'],
-        hashtags: ['#help', '#home', '#wannahome']
-    },
-    {
-        id: '13',
-        description: 'Как красиво! #природа #красота',
-        createdAt: new Date('2018-02-17T21:00:00'),
-        author: 'YanPark',
-        photoLink: 'img/IMGP2620.jpg',
-        likes: ['MarkL', 'Bobby'],
-        hashtags: ['#природа', '#красота']
-    },
-    {
-        id: '14',
-        description: 'Женская сборная Беларуси выиграла эстафету в рамках соревнований по биатлону на Олимпийских играх в Пхёнчхане!!! #победа',
-        createdAt: new Date('2018-02-15T23:00:00'),
-        author: 'Иванов Иван',
-        photoLink: 'http://ont.by/webroot/delivery/files/news/2018/02/22/Dom.jpg',
-        likes: ['MarkL', 'Bobby'],
-        hashtags: ['#победа']
-    },
-    {
-        id: '15',
-        description: 'Милый кот хочет кушать! #спаси_его',
-        createdAt: new Date('2018-02-14T14:15:00'),
-        author: 'Оля Мика',
-        photoLink: 'img/IMGP2621.jpg',
-        likes: ['MarkL', 'Bobby'],
-        hashtags: ['#спаси_его']
-    },
-    {
-        id: '16',
-        description: 'Save homeless dog! You can do it! #help#home#wannahome',
-        createdAt: new Date('2018-02-12T21:00:00'),
-        author: 'Ki North',
-        photoLink: 'img/IMGP2622.jpg',
-        likes: ['MarkL', 'Bobby'],
-        hashtags: ['#help', '#home', '#wannahome']
-    },
-    {
-        id: '17',
-        description: 'Как красиво! #природа #красота #мир',
-        createdAt: new Date('2018-02-11T21:00:00'),
-        author: 'YanPark',
-        photoLink: 'img/IMGP2620.jpg',
-        likes: ['MarkL', 'Bobby'],
-        hashtags: ['#природа', '#красота', '#мир']
-    },
-    {
-        id: '18',
-        description: 'Женская сборная Беларуси выиграла эстафету в рамках соревнований по биатлону на Олимпийских играх в Пхёнчхане!!! #победа',
-        createdAt: new Date('2018-02-09T23:00:00'),
-        author: 'Иванов Иван',
-        photoLink: 'http://ont.by/webroot/delivery/files/news/2018/02/22/Dom.jpg',
-        likes: ['MarkL', 'Bobby'],
-        hashtags: ['#победа']
-    },
-    {
-        id: '19',
-        description: 'Милый кот хочет кушать! #спаси_его',
-        createdAt: new Date('2018-02-07T14:15:00'),
-        author: 'Оля Мика',
-        photoLink: 'img/IMGP2621.jpg',
-        likes: ['MarkL', 'Bobby'],
-        hashtags: ['#спаси_его']
-    },
-    {
-        id: '20',
-        description: 'Save homeless dog! You can do it! #help#home#wannahome',
-        createdAt: new Date('2018-02-05T21:00:00'),
-        author: 'Ki North',
-        photoLink: 'img/IMGP2622.jpg',
-        likes: ['MarkL', 'Bobby'],
-        hashtags: ['#help', '#home', '#wannahome']
-    }
-];
-
-window.funcModul = (function () {
+window.funcModule = (function () {
     return {
         getPhotoPosts: function (skip = 0, top = 8, filterConfig) {
             if (typeof skip !== 'number' || typeof top !== 'number') {
                 console.log("typeError in getPhotoPosts");
                 return;
             }
+            photoPosts = JSON.parse(window.localStorage.posts, function (key, value) {
+                if (key == 'createdAt') return new Date(value);
+                return value;
+            });
             if (filterConfig === undefined) {
+                if (photoPosts.slice(skip + top).length === 0) {
+                    document.querySelector('.load-more-button').style.display = 'none';
+                }
                 return photoPosts.slice(skip, skip + top);
             } else {
                 if (typeof filterConfig !== 'object') {
@@ -197,8 +110,8 @@ window.funcModul = (function () {
                     return;
                 }
                 let photoFilterResult = photoPosts;
-                if (filterConfig.author) {
-                    photoFilterResult = photoFilterResult.filter(elem => elem.author === filterConfig.author);
+                if (filterConfig.authors) {
+                    photoFilterResult = photoFilterResult.filter(elem => filterConfig.authors.includes(elem.author));
                 }
                 if (filterConfig.createdAt) {
                     photoFilterResult = photoFilterResult.filter(elem =>
@@ -213,9 +126,11 @@ window.funcModul = (function () {
                         });
                     });
                 }
+                if (photoFilterResult.slice(skip, skip + top).length <= 8 && photoFilterResult.slice(skip + top).length === 0) {
+                    document.querySelector('.load-more-button').style.display = 'none';
+                }
                 return photoFilterResult.slice(skip, skip + top);
             }
-            return photoPosts;
         },
         getPhotoPost: function (id) {
             return photoPosts.find(elem => elem.id == id);
@@ -232,8 +147,13 @@ window.funcModul = (function () {
         },
         addPhotoPost: function (photoPost) {
             if (this.validatePhotoPost(photoPost) && photoPosts.findIndex(elem => elem.id === photoPost.id) === -1) {
+                photoPosts = JSON.parse(window.localStorage.posts, function (key, value) {
+                    if (key == 'createdAt') return new Date(value);
+                    return value;
+                });
                 photoPosts.push(photoPost);
                 photoPosts.sort((elem1, elem2) => elem2.createdAt - elem1.createdAt);
+                localStorage.setItem('posts', JSON.stringify(photoPosts));
                 return true;
             }
             else {
@@ -242,14 +162,12 @@ window.funcModul = (function () {
             }
         },
         validateEditedPost: function (post) {
-            if (post.description)
-                if (post.description.length === 0 || post.description.length > 200 || typeof post.description !== 'string') return false;
+            if (post.description.length === 0 || post.description.length > 200 || typeof post.description !== 'string') return false;
+            if (typeof post.photoLink !== 'string' || post.photoLink.length === 0) return false;
             if (post.author)
                 if (typeof post.author !== 'string' || post.author.length === 0) return false;
             if (post.hashtags)
                 if (!(post.hashtags instanceof Array)) return false;
-            if (post.photoLink)
-                if (typeof post.photoLink !== 'string' || post.photoLink.length === 0) return false;
             if (post.likes)
                 if (!(post.likes instanceof Array)) return false;
             if (post.createdAt)
@@ -262,9 +180,14 @@ window.funcModul = (function () {
             if (this.validateEditedPost(photoPost)) {
                 let index = photoPosts.findIndex(elem => elem.id == id);
                 if (index !== -1) {
-                    if (photoPost.description) photoPosts[index].description = photoPost.description;
-                    if (photoPost.photoLink) photoPosts[index].photoLink = photoPost.photoLink;
-                    if (photoPost.hashtags) photoPosts[index].hashtags = photoPost.hashtags;
+                    photoPosts = JSON.parse(window.localStorage.posts, function (key, value) {
+                        if (key == 'createdAt') return new Date(value);
+                        return value;
+                    });
+                    if (photoPost.description) { photoPosts[index].description = photoPost.description; }
+                    if (photoPost.hashtags) { photoPosts[index].hashtags = photoPost.hashtags; }
+                    if (photoPost.photoLink) { photoPosts[index].photoLink = photoPost.photoLink; }
+                    window.localStorage.setItem('posts', JSON.stringify(photoPosts));
                     return true;
                 }
             }
@@ -273,7 +196,12 @@ window.funcModul = (function () {
         removePhotoPost: function (id) {
             let index = photoPosts.findIndex(elem => elem.id == id);
             if (index !== -1) {
+                photoPosts = JSON.parse(window.localStorage.posts, function (key, value) {
+                    if (key == 'createdAt') return new Date(value);
+                    return value;
+                });
                 photoPosts.splice(index, 1);
+                window.localStorage.setItem('posts', JSON.stringify(photoPosts));
                 return true;
             } else return false;
         }
