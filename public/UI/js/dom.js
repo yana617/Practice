@@ -112,7 +112,7 @@ window.domModule = (function () {
                      </a>
                </div>`;
             div.innerHTML = `
-                <img class="image-position" src="` + post.photoLink + `" alt="photo">
+                <img class="image-position" src="${(post.photoLink.startsWith('http:') ? '' :'/public/UI/') + post.photoLink}" alt="photo">
                 <div class="image-owner-data-info">
                     <span class="user-name-label">` + post.author + ' | ' + post.createdAt.toLocaleString("ru", options) + `</span>
                     <div class="likes">

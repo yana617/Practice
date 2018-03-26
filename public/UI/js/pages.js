@@ -6,7 +6,7 @@ window.getHTML = (function () {
                 <a href="#" onclick="reloadMain()" class="logo">
                     <div>
                         <div class="icon">
-                            <img src="img/icon.png">
+                            <img src="/public/UI/img/icon.png">
                         </div>
                         <span class="logo-text">PhotoCloud</span>
                     </div>
@@ -82,7 +82,7 @@ window.getHTML = (function () {
             <div class="add-form">
                 <div class="photo-form">
                     <div class="addphoto-image">
-                        <img src="img/addPhoto.jpg" class="addphoto-image-size">
+                        <img src="/public/UI/img/addPhoto.jpg" class="addphoto-image-size">
                             <a href="#" onclick="">
                                 <div class="plus" onclick="getFile()">
                                     <input type="file" id="img-upload" onchange="updateImageDisplay();" accept="image/*" required />
@@ -128,7 +128,7 @@ window.getHTML = (function () {
         LogInPage: function () {
             return `
             <div class="main">
-                <img src="img/icon.png" class="icon-link" onclick="setMainPage();"/>
+                <img src="/public/UI/img/icon.png" class="icon-link" onclick="setMainPage();"/>
                 <div class="input-block">
                     <div class="text-log-in"><span>ВХОД</span></div>
                     <form onsubmit="signIn()">
