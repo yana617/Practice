@@ -26,9 +26,9 @@ function reloadMain() {
 function loadMore(link) {
     const count = document.getElementsByClassName('post').length;
     getPhotoPosts(count, 8);
-    if (count + 8 >= photoPosts.length) {
-        link.style.display = 'none';
-    }
+    //if (count + 8 >= photoPosts.length) {
+      //  link.style.display = 'none';
+    //}
 }
 function signIn() {
     const textName = document.getElementById('input_name').value;
@@ -50,7 +50,6 @@ function setImageLink() {
     document.querySelector('.addphoto-image-size').src = document.querySelector('.image-link-input').value;
 }
 function addPhoto() {
-    const id = JSON.parse(window.localStorage.id).toString();
     const author = domModule.getUser();
     const likes = [];
     let photoLink;
@@ -64,15 +63,8 @@ function addPhoto() {
     description = description.replace(/\n/g, '<br>');
     if (hashtags === null) hashtags = [];
     const createdAt = new Date();
-    const post = { id, description, createdAt, author, photoLink, likes, hashtags };
-    if (addPhotoPost(post)) {
-        setMainPageFromAddEdit();
-        document.querySelector('.sign').setAttribute('onclick', 'logOut();');
-        window.localStorage.setItem('id', (parseInt(id) + 1));
-    }
-    else {
-        setAgreementPage();
-    }
+    const post = { description, createdAt, author, photoLink, likes, hashtags };
+    addPhotoPost(post);
 }
 function editPhoto() {
     let photoLink;
@@ -88,9 +80,7 @@ function editPhoto() {
     if (photoLink) post = { description, hashtags, photoLink };
     else post = { description, hashtags };
     const id = document.querySelector('.add-form').getAttribute('id');
-    if (!editPhotoPost(id, post)) {
-        setAgreementPage();
-    }
+    editPhotoPost(id, post);
 }
 function rewatch(textAreaLink) {
     const textArea = textAreaLink;

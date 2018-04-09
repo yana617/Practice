@@ -72,10 +72,7 @@ window.domModule = (function () {
                     nameFull.style.display = 'flex';
                     nameFull.textContent = user;
                 }
-
             }
-            document.getElementsByClassName('content')[0].innerHTML = '';
-            getPhotoPosts();
             return true;
         },
         getUser: function () {
@@ -91,7 +88,6 @@ window.domModule = (function () {
             filter = newFilter;
         },
         createPost: function (post) {
-
             let div = document.createElement('div');
             div.id = post.id;
             div.className = "post";
@@ -112,12 +108,12 @@ window.domModule = (function () {
                      </a>
                </div>`;
             div.innerHTML = `
-                <img class="image-position" src="${(post.photoLink.startsWith('http:') ? '' :'/public/UI/') + post.photoLink}" alt="photo">
+                <img class="image-position" src="` + post.photoLink + `" alt="photo">
                 <div class="image-owner-data-info">
                     <span class="user-name-label">` + post.author + ' | ' + post.createdAt.toLocaleString("ru", options) + `</span>
                     <div class="likes">
                         <a class="heart-div" href="#" onclick="likeIt(this)">`
-                            + heart + `
+                + heart + `
                         </a>
                         <div class="likes-count">
                             <span class="count-of-likes">`+ post.likes.length + `</span>
@@ -131,64 +127,87 @@ window.domModule = (function () {
             return div;
         },
         addPost: function (post) {
-            if (funcModule.addPhotoPost(post)) {
-                return true;
-            }
-            return false;
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', '/addPhotoPost', true);
+            xhr.setRequestHeader('Content-type', 'application/json');
+            xhr.send(JSON.stringify(post));
+            xhr.onload = () => {
+                if (xhr.status === 200) {
+                    setMainPageFromAddEdit();
+                    document.querySelector('.sign').setAttribute('onclick', 'logOut();');
+                } else if (xhr.status === 400) {
+                    setAgreementPage();
+                }
+            };
         },
         getPosts: function (skip = 0, top = 8, filterConfig) {
             if (filter && !filterConfig) {
                 filterConfig = filter;
             }
             document.querySelector('.load-more-button').style.display = 'block';
-            let posts = funcModule.getPhotoPosts(skip, top, filterConfig);
             filter = filterConfig;
-            posts.forEach((elem) => {
-                content.appendChild(this.createPost(elem));
-            });
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', `/getPhotoPosts?skip=${skip}&top=${top}`, true);
+            xhr.setRequestHeader('Content-type', 'application/json');
+            xhr.send(JSON.stringify(filterConfig));
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    let result = JSON.parse(xhr.response, (key, value) => {
+                        if (key == 'createdAt') return new Date(value);
+                        return value;
+                    });
+                    result.posts.forEach((elem) => {
+                        content.appendChild(this.createPost(elem));
+                    });
+                    if (!result.pagination) document.querySelector('.load-more-button').style.display = 'none';
+                } else if (xhr.status === 400) {
+                    console.log("error");
+
+                }
+            };
         },
         editPost: function (id, post) {
-            if (funcModule.editPhotoPost(id, post)) {
-                setMainPageFromAddEdit();
-                return true;
-            }
-            return false;
+            let xhr = new XMLHttpRequest();
+            xhr.open('PUT', `/editPhotoPost?id=${id}`, true);
+            xhr.setRequestHeader('Content-type', 'application/json');
+            xhr.send(JSON.stringify(post));
+            xhr.onload = () => {
+                if (xhr.status === 200) {
+                    setMainPageFromAddEdit();
+                } else if (xhr.status === 400) {
+                    setAgreementPage();
+                }
+            };
         },
         removePost: function (id) {
-            if (funcModule.removePhotoPost(id)) {
-                content.removeChild(document.getElementById(id));
-                let count = document.getElementsByClassName('post').length;
-                this.getPosts(count, 1);
-                return true;
-            }
-            return false;
+            let xhr = new XMLHttpRequest();
+            xhr.open('DELETE', `/removePhotoPost?id=${id}`, true);
+            xhr.setRequestHeader('Content-type', 'application/json');
+            xhr.send();
+            xhr.onreadystatechange = () => {
+                if (xhr.status === 200 && xhr.readyState === 4) {
+                    content.removeChild(document.getElementById(id));
+                    let count = document.getElementsByClassName('post').length;
+                    this.getPosts(count, 1);
+                } else if (xhr.status === 400) {
+                    console.log("error");
+                }
+            };
         }
     }
 })();
 
 function getPhotoPosts(skip = 0, top = 8, filterConfig) {
-    if(domModule.getPosts(skip, top, filterConfig)) {
-        return true;
-    }
-    return false;
+    domModule.getPosts(skip, top, filterConfig);
 }
 function addPhotoPost(post) {
-    if (domModule.addPost(post)) {
-        return true;
-    }
-    return false;
+    domModule.addPost(post);
 }
 function editPhotoPost(id, post) {
-    if (domModule.editPost(id, post)) {
-        return true;
-    }
-    return false
+    domModule.editPost(id, post);
 }
 function removePhotoPost(id) {
-    if (domModule.removePost(id)) {
-        return true;
-    }
-    return false;
+    domModule.removePost(id);
 }
 
 setMainPage();

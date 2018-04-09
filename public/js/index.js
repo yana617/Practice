@@ -6,7 +6,7 @@ if (!localStorage.getItem('posts')) {
             description: 'Спать! #сон #cute',
             createdAt: new Date('2018-03-09T13:41:00'),
             author: 'CatVlog',
-            photoLink: 'img/IMG1.jpg',
+            photoLink: '/public/img/IMG1.jpg',
             likes: ['Bobby', 'HiWorld'],
             hashtags: ['#сон', '#cute']
         },
@@ -15,7 +15,7 @@ if (!localStorage.getItem('posts')) {
             description: 'Wow! #nature',
             createdAt: new Date('2018-03-07T08:25'),
             author: 'naturePhoto',
-            photoLink: 'img/IMG4.jpg',
+            photoLink: '/public/img/IMG4.jpg',
             likes: ['Bobby', 'MarkK', 'ИванИванов'],
             hashtags: ['#nature']
         },
@@ -24,7 +24,7 @@ if (!localStorage.getItem('posts')) {
             description: 'Save homeless dog! You can do it! #help#home#wannahome',
             createdAt: new Date('2018-03-05T21:00:00'),
             author: 'KateK',
-            photoLink: 'img/IMGP2622.jpg',
+            photoLink: '/public/img/IMGP2622.jpg',
             likes: ['MarkL', 'Bobby'],
             hashtags: ['#help', '#home', '#wannahome']
         },
@@ -33,7 +33,7 @@ if (!localStorage.getItem('posts')) {
             description: 'Как красиво! #природа #красота #мир',
             createdAt: new Date('2018-03-03T21:00:00'),
             author: 'YanPark',
-            photoLink: 'img/IMGP2620.jpg',
+            photoLink: '/public/img/IMGP2620.jpg',
             likes: ['MarkL', 'Bobby'],
             hashtags: ['#природа', '#красота', '#мир']
         },
@@ -42,7 +42,7 @@ if (!localStorage.getItem('posts')) {
             description: '#кубик',
             createdAt: new Date('2018-03-02T21:15:00'),
             author: 'YanPark',
-            photoLink: 'img/IMG2.jpg',
+            photoLink: '/public/img/IMG2.jpg',
             likes: ['MишаК'],
             hashtags: ['#кубик']
         },
@@ -60,7 +60,7 @@ if (!localStorage.getItem('posts')) {
             description: 'Милый кот хочет кушать! #спаси_его',
             createdAt: new Date('2018-02-24T14:15:00'),
             author: 'ОляМика',
-            photoLink: 'img/IMGP2621.jpg',
+            photoLink: '/public/img/IMGP2621.jpg',
             likes: ['MarkL', 'Bobby'],
             hashtags: ['#спаси_его']
         },
@@ -69,7 +69,7 @@ if (!localStorage.getItem('posts')) {
             description: 'Wow! It is so unreal! #reality #nature',
             createdAt: new Date('2018-02-20T23:45'),
             author: 'naturePhoto',
-            photoLink: 'img/IMG3.jpg',
+            photoLink: '/public/img/IMG3.jpg',
             likes: ['Bobby', 'YanPark', 'ИванИванов'],
             hashtags: ['#reality', '#nature']
         },
@@ -78,7 +78,7 @@ if (!localStorage.getItem('posts')) {
             description: '#wings',
             createdAt: new Date('2018-02-18T13:03'),
             author: 'Bobby',
-            photoLink: 'img/IMG5.jpg',
+            photoLink: '/public/img/IMG5.jpg',
             likes: ['Bobby', 'YanPark', 'ИванИванов', 'MarkK', 'naturePhoto'],
             hashtags: ['#wings']
         }
