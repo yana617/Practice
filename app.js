@@ -11,7 +11,7 @@ app.use(require('body-parser').json());
 
 app.post('/uploadImage', upload.single('file'), (req, res) => {
     fs.writeFileSync('./public/img/' + req.file.originalname, req.file.buffer);
-    res.status(200).end();
+    res.status(204).end();
 });
 
 app.post('/addPhotoPost', (req, res) => {

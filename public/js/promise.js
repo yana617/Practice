@@ -13,6 +13,17 @@ window.myFetch = (function () {
                 else
                     throw new Error(response.statusText);
             });
+        },
+        serverSendFile: function(method, url, data){
+            return fetch(url, {
+                body: data,
+                method: method
+            }).then((response)=>{
+                if (response.ok)
+                    return response;
+                else
+                    throw new Error(response.statusText);
+            });
         }
     }
 })();

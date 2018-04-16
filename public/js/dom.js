@@ -149,13 +149,11 @@ window.domModule = (function () {
         sendPhoto: function (file) {
             var formData = new FormData();
             formData.append('file', file);
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', '/uploadImage', true);
-            xhr.send(formData);
-            xhr.onreadystatechange = () => {
-                if (xhr.readyState !== 4) return;
-                document.querySelector('.addphoto-image-size').src = '/img/' + document.getElementById('img-upload').files[0].name;
-            };
+            myFetch.serverSendFile('POST', `/uploadImage`, formData)
+                .then(() => {
+                    document.querySelector('.addphoto-image-size').src = '/img/' + document.getElementById('img-upload').files[0].name;
+                })
+                .catch(error => console.log(error))
         },
         getPosts: function (skip = 0, top = 9, filterConfig) {
             if (filter && !filterConfig) {
