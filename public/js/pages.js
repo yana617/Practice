@@ -91,7 +91,6 @@ window.getHTML = (function () {
                             </a>
                         </img>   
                     </div>
-                    <input class="image-link-input" type="text" onchange="setImageLink();" placeholder="или введите ссылку">
                 </div>
                 <div class="description-form">
                     <span class="to-do-info">Описание:</span>
@@ -115,7 +114,6 @@ window.getHTML = (function () {
                             </a>
                         </img>
                     </div>
-                    <input class="image-link-input" type="text" onchange="setImageLink();" placeholder="или введите ссылку">
                 </div>
                 <div class="description-form">
                     <span class="to-do-info">Описание:</span>

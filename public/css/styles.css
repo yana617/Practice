@@ -291,7 +291,28 @@ header{
     display: flex;
     flex-direction: row;
     width: auto;
+    position: relative;
     height: 100%;
+}
+.show-likes{
+    position: absolute;
+    top: -120px;
+    left: -45px;
+    width: 100px;
+    height: 120px;
+    background-color: white;
+    border: 1px black solid; 
+    display: none;
+    border-radius: 5px;
+    overflow: auto;
+    color: black;
+    text-align: center;
+}
+.show-likes::-webkit-scrollbar{
+    width: 10px;
+}
+.likes:hover .show-likes{
+    display: block;
 }
 .likes-count{
     margin-left: 5px;

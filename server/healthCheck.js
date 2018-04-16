@@ -3,7 +3,7 @@ const fs = require('fs');
 const postsPath = './server/data/posts.json';
 funcModule = (function () {
     return {
-        getPhotoPosts: function (skip = 0, top = 8, filterConfig) {
+        getPhotoPosts: function (skip = 0, top = 9, filterConfig) {
             let result = {};
             result.pagination = true;
             if (typeof skip !== 'number' || typeof top !== 'number') {
@@ -42,7 +42,7 @@ funcModule = (function () {
                         });
                     });
                 }
-                if (photoFilterResult.slice(skip, skip + top).length <= 8 && photoFilterResult.slice(skip + top).length === 0) {
+                if (photoFilterResult.slice(skip, skip + top).length <= 9 && photoFilterResult.slice(skip + top).length === 0) {
                     result.pagination = false;
                 }
                 result.posts = photoFilterResult.slice(skip, skip + top);
@@ -84,8 +84,10 @@ funcModule = (function () {
             }
         },
         validateEditedPost: function (post) {
-            if (post.description.length === 0 || post.description.length > 200 || typeof post.description !== 'string') return false;
-            if (post.photoLink) {
+            if (typeof post.description !== 'undefined') {
+                if (post.description.length === 0 || post.description.length > 200 || typeof post.description !== 'string') return false;
+            }
+            if (typeof post.photoLink !== 'undefined') {
                 if (typeof post.photoLink !== 'string' || post.photoLink.length === 0) return false;
             }
             if (post.author)
@@ -102,7 +104,6 @@ funcModule = (function () {
         },
         editPhotoPost: function (id, photoPost) {
             if (funcModule.validateEditedPost(photoPost)) {
-                console.log("+++");
                 photoPosts = JSON.parse(fs.readFileSync(postsPath), function (key, value) {
                     if (key == 'createdAt') return new Date(value);
                     return value;
@@ -112,6 +113,7 @@ funcModule = (function () {
                     if (photoPost.description) { photoPosts[index].description = photoPost.description; }
                     if (photoPost.hashtags) { photoPosts[index].hashtags = photoPost.hashtags; }
                     if (photoPost.photoLink) { photoPosts[index].photoLink = photoPost.photoLink; }
+                    if (photoPost.likes) { photoPosts[index].likes = photoPost.likes; }
                     fs.writeFileSync(postsPath, JSON.stringify(photoPosts));
                     return true;
                 }

@@ -16,7 +16,7 @@ function agreeOk() {
 }
 function logOut() {
     domModule.changeUser(null);
-    localStorage.setItem('user', 'undefined');
+    localStorage.setItem('photocloud-user', 'undefined');
 }
 function reloadMain() {
     document.querySelector('.content').innerHTML = '';
@@ -25,16 +25,13 @@ function reloadMain() {
 }
 function loadMore(link) {
     const count = document.getElementsByClassName('post').length;
-    getPhotoPosts(count, 8);
-    //if (count + 8 >= photoPosts.length) {
-      //  link.style.display = 'none';
-    //}
+    getPhotoPosts(count, 9);
 }
 function signIn() {
     const textName = document.getElementById('input_name').value;
     setMainPage();
     domModule.changeUser(textName);
-    localStorage.setItem('user', textName);
+    localStorage.setItem('photocloud-user', textName);
 }
 function getFile() {
     document.getElementById("img-upload").click();
@@ -42,22 +39,20 @@ function getFile() {
 function updateImageDisplay() {
     const curFiles = document.getElementById("img-upload").files;
     if (curFiles.length !== 0) {
-        document.querySelector('.addphoto-image-size').src = document.getElementById('img-upload').files[0].name;
-        document.querySelector('.image-link-input').value = '';
+        domModule.sendPhoto(document.getElementById('img-upload').files[0]);
     }
-}
-function setImageLink() {
-    document.querySelector('.addphoto-image-size').src = document.querySelector('.image-link-input').value;
 }
 function addPhoto() {
     const author = domModule.getUser();
     const likes = [];
-    let photoLink;
+    let photoLink, photo;
     const srcLength = document.querySelector('.addphoto-image-size').src.length;
     if (document.querySelector('.addphoto-image-size').src.substr(srcLength - 16) === 'img/addPhoto.jpg' || document.querySelector('.addphoto-image-size').height === 16) {
         photoLink = null;
     }
-    else photoLink = document.querySelector('.addphoto-image-size').src;
+    else {
+        photoLink = document.querySelector('.addphoto-image-size').src;
+    }
     let description = document.getElementById('text-form').value;
     let hashtags = description.match(/#[^\s#]*/g);
     description = description.replace(/\n/g, '<br>');
@@ -94,33 +89,52 @@ function rewatch(textAreaLink) {
 function likeIt(childId) {
     event.preventDefault();
     const id = childId.parentNode.parentNode.parentNode.id;
-    let photoPosts = JSON.parse(window.localStorage.posts, function (key, value) {
-        if (key == 'createdAt') return new Date(value);
-        return value;
-    });
-    const index = photoPosts.findIndex(elem => elem.id === id);
     if (domModule.getUser() === null) {
         setAgreementPageinMain();
     }
     else {
-        if (photoPosts[index].likes.findIndex(item => item === domModule.getUser()) === -1) {
-            photoPosts[index].likes.push(domModule.getUser());
+        let likes = document.getElementById(id).querySelector('.show-likes').innerHTML.replace(/<br>/g, ' ').trim().split(' ');
+        likes = likes.filter(elem => elem.length > 0);
+        if (likes.findIndex(item => item === domModule.getUser()) === -1) {
+            likes.push(domModule.getUser());
+            let newLikes = likes[0];
+            for (let i = 1; i < likes.length; i++) {
+                newLikes += `<br>${likes[i]}`;
+            }
+            document.getElementById(id).querySelector('.show-likes').innerHTML = newLikes;
             document.getElementById(id).querySelector('.heart-div').innerHTML = '<i class="fa fa-heart fa-2x heart" aria-hidden="true"></i>';
-            document.getElementById(id).querySelector('.count-of-likes').textContent = photoPosts[index].likes.length;
+            document.getElementById(id).querySelector('.count-of-likes').textContent = likes.length;
         }
         else {
-            let index2 = photoPosts[index].likes.findIndex(elem => elem === domModule.getUser());
-            photoPosts[index].likes.splice(index2, 1);
+            let index2 = likes.findIndex(elem => elem === domModule.getUser());
+            likes.splice(index2, 1);
+            if (likes.length > 0) {
+                let newLikes = likes[0];
+                for (let i = 1; i < likes.length; i++) {
+                    newLikes += `<br>${likes[i]}`
+                }
+                document.getElementById(id).querySelector('.show-likes').innerHTML = newLikes;
+            } else document.getElementById(id).querySelector('.show-likes').innerHTML = '';
             document.getElementById(id).querySelector('.heart-div').innerHTML = '<i class="fa fa-heart-o fa-2x" aria-hidden="true"></i>';
-            document.getElementById(id).querySelector('.count-of-likes').textContent = photoPosts[index].likes.length;
+            document.getElementById(id).querySelector('.count-of-likes').textContent = likes.length;
         }
+        let post = {}; post.likes = likes;
+        let xhr = new XMLHttpRequest();
+        xhr.open('PUT', `/editPhotoPost?id=${id}`, true);
+        xhr.setRequestHeader('Content-type', 'application/json');
+        xhr.send(JSON.stringify(post));
+        xhr.onload = () => {
+            if (xhr.status === 200) {
+            } else if (xhr.status === 400) {
+                console.log("error");
+            }
+        };
     }
-    window.localStorage.setItem('posts', JSON.stringify(photoPosts));
 }
 function logOutFromAddEdit() {
     setMainPage();
     domModule.changeUser(null);
-    localStorage.setItem('user', 'undefined');
+    localStorage.setItem('photocloud-user', 'undefined');
 }
 function filterByEnter() {
     if (event.keyCode == 13) {

@@ -50,6 +50,8 @@ window.domModule = (function () {
                 document.getElementsByClassName('user-name-short')[0].style.display = 'none';
                 document.getElementsByClassName('user-name-full')[0].style.display = 'none';
                 document.getElementsByClassName('add-photo')[0].style.display = 'none';
+                document.getElementsByClassName('content')[0].innerHTML = '';
+                this.getPosts();
             }
             else {
                 if (user === null || typeof username === undefined) {
@@ -79,10 +81,10 @@ window.domModule = (function () {
             return user;
         },
         setUser: function () {
-            if (localStorage.getItem('user') === 'undefined') {
+            if (localStorage.getItem('photocloud-user') === 'undefined') {
                 this.changeUser(null);
             }
-            else this.changeUser(localStorage.getItem('user'));
+            else this.changeUser(localStorage.getItem('photocloud-user'));
         },
         setFilter: function (newFilter) {
             filter = newFilter;
@@ -107,97 +109,94 @@ window.domModule = (function () {
                          <i class="fa fa-trash-o iDelete fa-2x" aria-hidden="true"></i>
                      </a>
                </div>`;
+            let likes;
+            if (post.likes.length > 0) {
+                likes = post.likes[0];
+                for (let i = 1; i < post.likes.length; i++) {
+                    likes += `<br>${post.likes[i]}`;
+                }
+            } else likes = '<br>';
             div.innerHTML = `
-                <img class="image-position" src="` + post.photoLink + `" alt="photo">
+                <img class="image-position" src="${post.photoLink}" alt="photo">
                 <div class="image-owner-data-info">
-                    <span class="user-name-label">` + post.author + ' | ' + post.createdAt.toLocaleString("ru", options) + `</span>
+                    <span class="user-name-label">${post.author} |  ${post.createdAt.toLocaleString("ru", options)}</span>
                     <div class="likes">
-                        <a class="heart-div" href="#" onclick="likeIt(this)">`
-                + heart + `
+                        <a class="heart-div" href="#" onclick="likeIt(this)">
+                            ${heart}
                         </a>
                         <div class="likes-count">
-                            <span class="count-of-likes">`+ post.likes.length + `</span>
+                            <span class="count-of-likes">${post.likes.length}</span>
+                        </div>
+                        <div class="show-likes">
+                            ${likes}
                         </div>
                     </div>
                 </div>
                 <div class="image-text">
-                    <p class="text-info">` + post.description + `</p>
+                    <p class="text-info">${post.description}</p>
                 </div>`;
             if (user === post.author) div.innerHTML = isOwner + div.innerHTML;
             return div;
         },
         addPost: function (post) {
-            let xhr = new XMLHttpRequest();
-            xhr.open('POST', '/addPhotoPost', true);
-            xhr.setRequestHeader('Content-type', 'application/json');
-            xhr.send(JSON.stringify(post));
-            xhr.onload = () => {
-                if (xhr.status === 200) {
+            myFetch.serverRequest('POST', `/addPhotoPost`, post)
+                .then(data => {
                     setMainPageFromAddEdit();
                     document.querySelector('.sign').setAttribute('onclick', 'logOut();');
-                } else if (xhr.status === 400) {
-                    setAgreementPage();
-                }
+                })
+                .catch(error => setAgreementPage())
+        },
+        sendPhoto: function (file) {
+            var formData = new FormData();
+            formData.append('file', file);
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/uploadImage', true);
+            xhr.send(formData);
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState !== 4) return;
+                document.querySelector('.addphoto-image-size').src = '/img/' + document.getElementById('img-upload').files[0].name;
             };
         },
-        getPosts: function (skip = 0, top = 8, filterConfig) {
+        getPosts: function (skip = 0, top = 9, filterConfig) {
             if (filter && !filterConfig) {
                 filterConfig = filter;
             }
             document.querySelector('.load-more-button').style.display = 'block';
             filter = filterConfig;
-            let xhr = new XMLHttpRequest();
-            xhr.open('POST', `/getPhotoPosts?skip=${skip}&top=${top}`, true);
-            xhr.setRequestHeader('Content-type', 'application/json');
-            xhr.send(JSON.stringify(filterConfig));
-            xhr.onreadystatechange = () => {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    let result = JSON.parse(xhr.response, (key, value) => {
+
+            myFetch.serverRequest('POST', `/getPhotoPosts?skip=${skip}&top=${top}`, filterConfig)
+                .then(data => {
+                    let posts = JSON.parse(JSON.stringify(data.posts), (key, value) => {
                         if (key == 'createdAt') return new Date(value);
                         return value;
                     });
-                    result.posts.forEach((elem) => {
+                    posts.forEach((elem) => {
                         content.appendChild(this.createPost(elem));
                     });
-                    if (!result.pagination) document.querySelector('.load-more-button').style.display = 'none';
-                } else if (xhr.status === 400) {
-                    console.log("error");
-
-                }
-            };
+                    if (!data.pagination) document.querySelector('.load-more-button').style.display = 'none';
+                })
+                .catch(error => console.error(error));
         },
         editPost: function (id, post) {
-            let xhr = new XMLHttpRequest();
-            xhr.open('PUT', `/editPhotoPost?id=${id}`, true);
-            xhr.setRequestHeader('Content-type', 'application/json');
-            xhr.send(JSON.stringify(post));
-            xhr.onload = () => {
-                if (xhr.status === 200) {
+            myFetch.serverRequest('PUT', `/editPhotoPost?id=${id}`, post)
+                .then(() => {
                     setMainPageFromAddEdit();
-                } else if (xhr.status === 400) {
-                    setAgreementPage();
-                }
-            };
+                })
+                .catch(() => setAgreementPage());
         },
         removePost: function (id) {
-            let xhr = new XMLHttpRequest();
-            xhr.open('DELETE', `/removePhotoPost?id=${id}`, true);
-            xhr.setRequestHeader('Content-type', 'application/json');
-            xhr.send();
-            xhr.onreadystatechange = () => {
-                if (xhr.status === 200 && xhr.readyState === 4) {
+            myFetch.serverRequest('DELETE', `/removePhotoPost?id=${id}`)
+                .then(() => {
                     content.removeChild(document.getElementById(id));
                     let count = document.getElementsByClassName('post').length;
                     this.getPosts(count, 1);
-                } else if (xhr.status === 400) {
-                    console.log("error");
-                }
-            };
+                })
+                .catch(error => console.log(error))
         }
     }
 })();
 
-function getPhotoPosts(skip = 0, top = 8, filterConfig) {
+function getPhotoPosts(skip = 0, top = 9, filterConfig) {
     domModule.getPosts(skip, top, filterConfig);
 }
 function addPhotoPost(post) {
@@ -210,5 +209,8 @@ function removePhotoPost(id) {
     domModule.removePost(id);
 }
 
+if (!localStorage.getItem('photocloud-user')) {
+    localStorage.setItem('photocloud-user', 'undefined');
+}
 setMainPage();
 domModule.setUser();
