@@ -15,5 +15,6 @@ module.exports = {
             "windows"
         ],
         "no-console": 0,
+        "no-plusplus": "off",
     }
 };

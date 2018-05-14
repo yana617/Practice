@@ -4,8 +4,6 @@ const options = {
     hour: 'numeric',
     minute: 'numeric',
 };
-let user = null;
-let userShort = null;
 let filter;
 let content;
 window.domModule = {
@@ -33,7 +31,7 @@ window.domModule = {
     },
     changeUser(username) {
         if (username === null || typeof username === 'undefined') {
-            user = null;
+            this.removeCookie('username');
             document.getElementsByClassName('sign')[0].setAttribute('onclick', 'setLogInPage()');
             document.getElementsByClassName('sign')[0].innerHTML = '<i class="fa fa-sign-in signicon2 fa-3x" aria-hidden="true"></i>';
             document.getElementsByClassName('user-name-short')[0].style.display = 'none';
@@ -42,37 +40,34 @@ window.domModule = {
             document.getElementsByClassName('content')[0].innerHTML = '';
             this.getPosts();
         } else {
-            if (user === null || typeof username === 'undefined') {
-                document.getElementsByClassName('sign')[0].setAttribute('onclick', 'logOut();');
-                document.getElementsByClassName('sign')[0].innerHTML = '<i class="fa fa-sign-out signicon fa-3x" aria-hidden="true"></i>';
-                document.getElementsByClassName('add-photo')[0].style.display = 'flex';
-            }
-            user = username;
+            document.getElementsByClassName('sign')[0].setAttribute('onclick', 'logOut();');
+            document.getElementsByClassName('sign')[0].innerHTML = '<i class="fa fa-sign-out signicon fa-3x" aria-hidden="true"></i>';
+            document.getElementsByClassName('add-photo')[0].style.display = 'flex';
             const nameShort = document.getElementsByClassName('user-name-short')[0];
             nameShort.style.display = 'flex';
-            userShort = this.makeUserNameShort(user);
-            nameShort.textContent = userShort;
+            nameShort.textContent = this.makeUserNameShort(this.getCookie('username'));
             const nameFull = document.getElementsByClassName('user-name-full')[0];
             if (document.body.clientWidth < 830) nameFull.style.display = 'none';
             else {
-                if (user.length > 13) {
+                if (this.getCookie('username').length > 13) {
                     nameFull.style.width = '200px';
                     nameShort.style.right = '240px';
                 }
                 nameFull.style.display = 'flex';
-                nameFull.textContent = user;
+                nameFull.textContent = this.getCookie('username');
             }
         }
         return true;
     },
     getUser() {
-        return user;
+        return this.getCookie('username');
     },
     setUser() {
-        if (localStorage.getItem('photocloud-user') === 'undefined') {
+        if (this.getCookie('username') === '') {
             this.changeUser(null);
+        } else {
+            this.changeUser(this.getCookie('username'));
         }
-        this.changeUser(localStorage.getItem('photocloud-user'));
     },
     setFilter(newFilter) {
         filter = newFilter;
@@ -82,9 +77,9 @@ window.domModule = {
         div.id = post.id;
         div.className = 'post';
         let heart = '<i class="fa fa-heart-o fa-2x" aria-hidden="true"></i>';
-        if (user) {
+        if (this.getCookie('username') !== '') {
             post.likes.forEach((elem) => {
-                if (elem === user) {
+                if (elem === this.getCookie('username')) {
                     heart = '<i class="fa fa-heart fa-2x heart" aria-hidden="true"></i>';
                 }
             });
@@ -121,7 +116,7 @@ window.domModule = {
                 <div class="image-text">
                     <p class="text-info">${post.description}</p>
                 </div>`;
-        if (user === post.author) div.innerHTML = isOwner + div.innerHTML;
+        if (this.getCookie('username') === post.author) div.innerHTML = isOwner + div.innerHTML;
         return div;
     },
     addPost(post) {
@@ -141,9 +136,9 @@ window.domModule = {
     sendPhoto(file) {
         const formData = new FormData();
         formData.append('file', file);
-        window.myFetch.serverSendFile('POST', `/uploadImage?user=${localStorage.getItem('photocloud-user')}`, formData)
+        window.myFetch.serverSendFile('POST', `/uploadImage?user=${this.getCookie('username')}`, formData)
             .then(() => {
-                document.querySelector('.addphoto-image-size').src = `/img/${localStorage.getItem('photocloud-user')}_${document.getElementById('img-upload').files[0].name}`;
+                document.querySelector('.addphoto-image-size').src = `/img/${this.getCookie('username')}_${document.getElementById('img-upload').files[0].name}`;
             })
             .catch(error => console.log(error));
     },
@@ -187,6 +182,27 @@ window.domModule = {
             })
             .catch(error => console.log(error));
     },
+    setCookie(cname, cvalue, exdays) {
+        const d = new Date();
+        d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+        const expires = `expires=${d.toUTCString()}`;
+        document.cookie = `${cname}=${cvalue};${expires};path=/`;
+    },
+    getCookie(cname) {
+        const name = `${cname}=`;
+        const decodedCookie = decodeURIComponent(document.cookie);
+        const ca = decodedCookie.split(';');
+        for (let i = 0; i < ca.length; i++) {
+            const c = ca[i].trimLeft();
+            if (c.startsWith(name)) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return '';
+    },
+    removeCookie(key) {
+        this.setCookie(key, '', 0);
+    },
 };
 
 window.getPhotoPosts = (skip = 0, top = 9, filterConfig) => {
@@ -202,8 +218,5 @@ window.removePhotoPost = (id) => {
     window.domModule.removePost(id);
 };
 
-if (!localStorage.getItem('photocloud-user')) {
-    localStorage.setItem('photocloud-user', 'undefined');
-}
 window.setMainPage();
 window.domModule.setUser();

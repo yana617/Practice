@@ -128,9 +128,9 @@ window.getHTML = {
                 <img src="/img/icon.png" class="icon-link" onclick="setMainPage();"/>
                 <div class="input-block">
                     <div class="text-log-in"><span>ВХОД</span></div>
-                    <form onsubmit="signIn()">
-                        <input class="input-name" type="text" id="input_name" pattern="^[А-ЯЁа-яёa-zA-Z][А-ЯЁа-яёa-zA-Z0-9-_\\.]{4,20}$" title="Вы ввели запрещенный символ! Только латиница и цифры." placeholder="Логин" required>
-                        <input class="input-password" id="input_password" type="password" maxlength="30" minlength="6" placeholder="Пароль" required>    
+                    <form id="login-form">
+                        <input class="input-name" name="username" type="text" id="input_name" pattern="^[А-ЯЁа-яёa-zA-Z][А-ЯЁа-яёa-zA-Z0-9-_\\.]{4,20}$" title="Вы ввели запрещенный символ! Только латиница и цифры." placeholder="Логин" required>
+                        <input class="input-password" name="password" id="input_password" type="password" maxlength="30" minlength="6" placeholder="Пароль" required>    
                         <div type="submit" class="for-button">
                             <button type='submit'>Войти</button>
                         </div>
@@ -139,7 +139,6 @@ window.getHTML = {
             </div>`;
     },
 };
-
 
 window.setMainPage = () => {
     document.body.innerHTML = window.getHTML.HeaderFooter();
@@ -150,9 +149,26 @@ window.setMainPage = () => {
     window.domModule.setContent();
     window.getPhotoPosts();
 };
+function logIn(event) {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const username = formData.get('username');
+    const password = formData.get('password');
+    window.myFetch.serverRequest('POST', `/login?username=${username}&password=${password}`)
+        .then((data) => {
+            window.domModule.setCookie('username', username, 365);
+            window.setMainPage();
+            window.domModule.changeUser(username);
+            if (data.info === 2) {
+                window.setAgreementPageRegistered(data.status);
+            }
+        })
+        .catch(() => alert('Неверный пароль'));
+}
 window.setLogInPage = () => {
     document.body.innerHTML = window.getHTML.LogInPage();
     window.domModule.setFilter();
+    document.getElementById('login-form').addEventListener('submit', event => logIn(event));
 };
 window.setAddPostPage = () => {
     document.querySelector('.add-button').style.display = 'none';
@@ -203,4 +219,11 @@ window.setAgreementPageinMain = () => {
     agreement.innerHTML = window.getHTML.AgreePage();
     document.querySelector('.main-container').appendChild(agreement);
     document.querySelector('.agree-info').textContent = 'Войдите в систему';
+};
+window.setAgreementPageRegistered = () => {
+    const agreement = document.createElement('div');
+    agreement.className = 'agreement';
+    agreement.innerHTML = window.getHTML.AgreePage();
+    document.querySelector('.main-container').appendChild(agreement);
+    document.querySelector('.agree-info').textContent = 'Вы успешно зарегестрированы!';
 };

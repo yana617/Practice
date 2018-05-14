@@ -27,8 +27,8 @@ const funcModule = {
         }
         let photoFilterResult = photoPosts;
         if (filterConfig.authors) {
-            photoFilterResult = photoFilterResult.filter(elem => filterConfig
-                .authors.includes(elem.author));
+            photoFilterResult = photoFilterResult
+                .filter(elem => filterConfig.authors.includes(elem.author));
         }
         if (filterConfig.createdAt) {
             photoFilterResult = photoFilterResult.filter(elem =>

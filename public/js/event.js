@@ -16,7 +16,6 @@ window.agreeOk = () => {
 };
 window.logOut = () => {
     window.domModule.changeUser(null);
-    localStorage.setItem('photocloud-user', 'undefined');
 };
 window.reloadMain = () => {
     document.querySelector('.content').innerHTML = '';
@@ -26,12 +25,6 @@ window.reloadMain = () => {
 window.loadMore = () => {
     const count = document.getElementsByClassName('post').length;
     window.getPhotoPosts(count, 9);
-};
-window.signIn = () => {
-    const textName = document.getElementById('input_name').value;
-    window.setMainPage();
-    window.domModule.changeUser(textName);
-    localStorage.setItem('photocloud-user', textName);
 };
 window.getFile = () => {
     document.getElementById('img-upload').click();
@@ -124,7 +117,6 @@ window.likeIt = (event, childId) => {
 window.logOutFromAddEdit = () => {
     window.setMainPage();
     window.domModule.changeUser(null);
-    localStorage.setItem('photocloud-user', 'undefined');
 };
 window.filterByEnter = (event) => {
     if (event.keyCode === 13) {
@@ -154,3 +146,4 @@ window.setFilterConfig = () => {
     document.querySelector('.content').innerHTML = '';
     window.getPhotoPosts(0, 9, filter);
 };
+

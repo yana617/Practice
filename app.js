@@ -2,13 +2,41 @@ const multer = require('multer');
 const express = require('express');
 const fs = require('fs');
 const bodyParser = require('body-parser');
-const func = require('./server/healthCheck');
+const func = require('./server/functions');
+const session = require('express-session');
+const passport = require('passport');
+const MongoStore = require('connect-mongo')(session);
+const flash = require('connect-flash');
+const mongoose = require('mongoose');
+const authRouter = require('./server/controller/authorization');
 
 const upload = multer();
 const app = express();
 
+const dbName = 'PhotoCloudDB';
+const connectionString = `mongodb://localhost:27017/${dbName}`;
+mongoose.connect(connectionString);
+
 app.use(express.static('./public'));
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(session({
+    secret: 'AXCJRGSBJUHFOS-AVDAV-4FDfd',
+    resave: true,
+    saveUninitialized: true,
+    store: new MongoStore({
+        url: `${connectionString}-app`,
+        ttl: 20 * 24 * 60 * 60,
+    }),
+}));
+app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.serializeUser((user, done) => done(null, user));
+passport.deserializeUser((user, done) => done(null, user));
+
+app.use('/login', authRouter);
 
 app.post('/uploadImage', upload.single('file'), (req, res) => {
     fs.writeFileSync(`./public/img/${req.query.user}_${req.file.originalname}`, req.file.buffer);
@@ -19,9 +47,9 @@ app.post('/addPhotoPost', (req, res) => {
     const post = req.body;
     post.id = JSON.parse(fs.readFileSync('./server/data/timePageID.json')).id;
     if (func.addPhotoPost(post)) {
-        res.send(JSON.stringify({ status: 'added' })).status(204).end();
+        res.send(JSON.stringify({ status: 'added' }));
     } else {
-        res.send(JSON.stringify({ status: 'no-added' })).status(200).end();
+        res.send(JSON.stringify({ status: 'no-added' }));
     }
 });
 app.get('/getPhotoPost', (req, res) => {
@@ -29,9 +57,8 @@ app.get('/getPhotoPost', (req, res) => {
         const post = func.getPhotoPost(req.query.id);
         if (post) {
             res.send(post);
-            res.status(200).end();
         } else {
-            res.send(JSON.stringify({ status: 'Error' })).status(400).end();
+            res.send(JSON.stringify({ status: 'Error' }));
         }
     } else {
         res.status(400).end();
