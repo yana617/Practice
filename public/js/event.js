@@ -16,6 +16,7 @@ window.agreeOk = () => {
 };
 window.logOut = () => {
     window.domModule.changeUser(null);
+    window.domModule.removeCookie('session_id');
     window.myFetch.serverRequest('PUT', '/logout')
         .catch(error => console.error(error));
 };

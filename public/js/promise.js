@@ -19,6 +19,7 @@ window.myFetch = {
         return fetch(url, {
             body: data,
             method,
+            credentials: 'include',
         }).then((response) => {
             if (response.ok) {
                 return response;

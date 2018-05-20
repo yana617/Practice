@@ -8,7 +8,7 @@ const upload = multer();
 const router = express.Router();
 
 router.post('/uploadImage', upload.single('file'), (req, res) => {
-    fs.writeFileSync(`./public/img/${req.query.user}_${req.file.originalname}`, req.file.buffer);
+    fs.writeFileSync(`./public/img/${req.user.username}_${req.file.originalname}`, req.file.buffer);
     res.status(204).end();
 });
 router.post('/addPhotoPost', (req, res) => {
@@ -74,10 +74,12 @@ router.post('/getPhotoPosts', (req, res) => {
                             .filter(elem => filterConfig.authors.includes(elem.author));
                     }
                     if (filterConfig.createdAt) {
-                        photoFilterResult = photoFilterResult.filter(elem =>
-                            elem.createdAt.getFullYear() === filterConfig.createdAt.getFullYear() &&
-                            elem.createdAt.getMonth() === filterConfig.createdAt.getMonth() &&
-                            elem.createdAt.getDate() === filterConfig.createdAt.getDate());
+                        photoFilterResult = photoFilterResult.filter((elem) => {
+                            const postDate = new Date(elem.createdAt);
+                            return postDate.getDate() === filterConfig.createdAt.getDate() &&
+                                postDate.getMonth() === filterConfig.createdAt.getMonth() &&
+                                postDate.getFullYear() === filterConfig.createdAt.getFullYear();
+                        });
                     }
                     if (filterConfig.hashtags) {
                         photoFilterResult = photoFilterResult.filter(elem => filterConfig.hashtags

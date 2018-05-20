@@ -35,6 +35,7 @@ window.domModule = {
             document.getElementsByClassName('sign')[0].innerHTML = '<i class="fa fa-sign-in signicon2 fa-3x" aria-hidden="true"></i>';
             document.getElementsByClassName('user-name-short')[0].style.display = 'none';
             document.getElementsByClassName('user-name-full')[0].style.display = 'none';
+            document.getElementsByClassName('user-name-full')[0].textContent = '';
             document.getElementsByClassName('add-photo')[0].style.display = 'none';
             document.getElementsByClassName('content')[0].innerHTML = '';
             this.getPosts();
@@ -58,14 +59,16 @@ window.domModule = {
         }
         return true;
     },
-    setUser() {
+    startPage() {
         if (this.getCookie('session_id') === '') {
+            window.setMainPage();
             this.changeUser(null);
         } else {
             window.myFetch.serverRequest('GET', '/setuser')
                 .then((data) => {
                     if (data.status === 'ok') {
-                        this.changeUser(data.username);
+                        window.setMainPage();
+                        window.domModule.changeUser(data.username);
                     }
                 })
                 .catch(error => console.log(error));
@@ -138,9 +141,10 @@ window.domModule = {
     sendPhoto(file) {
         const formData = new FormData();
         formData.append('file', file);
-        window.myFetch.serverSendFile('POST', `/uploadImage?user=${this.getCookie('username')}`, formData)
+        window.myFetch.serverSendFile('POST', '/uploadImage', formData)
             .then(() => {
-                document.querySelector('.addphoto-image-size').src = `/img/${this.getCookie('username')}_${document.getElementById('img-upload').files[0].name}`;
+                document.querySelector('.addphoto-image-size').src =
+                    `/img/${document.querySelector('.user-name-full').textContent}_${document.getElementById('img-upload').files[0].name}`;
             })
             .catch(error => console.log(error));
     },
@@ -158,7 +162,7 @@ window.domModule = {
                 posts.forEach(elem => content.appendChild(this.createPost(elem)));
                 if (!data.pagination) document.querySelector('.load-more-button').style.display = 'none';
             })
-            .catch(error => console.error(error));
+            .catch(error => console.log(error));
     },
     editPost(id, post) {
         window.myFetch.serverRequest('PUT', `/editPhotoPost?id=${id}`, post)
@@ -220,5 +224,4 @@ window.removePhotoPost = (id) => {
     window.domModule.removePost(id);
 };
 
-window.domModule.setUser();
-window.setMainPage();
+window.domModule.startPage();
