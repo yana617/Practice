@@ -156,10 +156,9 @@ function logIn(event) {
     const password = formData.get('password');
     window.myFetch.serverRequest('POST', `/login?username=${username}&password=${password}`)
         .then((data) => {
-            window.setMainPage();
-            window.domModule.changeUser(username);
-            if (data.info === 2) {
-                window.setAgreementPageinMain('Вы успешно зарегестрированы!');
+            if (data.info === 1) {
+                window.setMainPage();
+                window.domModule.changeUser(username);
             }
         })
         .catch(() => {

@@ -5,10 +5,10 @@ const User = require('../model/User');
 const bcrypt = require('bcrypt');
 
 const router = express.Router();
-
+/*
 function addUser(username, password) {
-    if (!username || !password) return false;
-    User.findOne({ username })
+    if (!username || !password) return Promise.reject();
+    return User.findOne({ username })
         .then((res) => { if (!res) throw res; })
         .catch(() => {
             const salt = bcrypt.genSaltSync(10);
@@ -17,18 +17,23 @@ function addUser(username, password) {
                 passwordHash: bcrypt.hashSync(password, salt),
                 passwordSalt: salt,
             });
-            user.save()
+            user.save().then(() => done(null, user))
                 .catch(err => console.log(err));
         });
-    return true;
 }
-
+*/
 passport.use(new LocalStrategy((username, password, done) => {
     User.findOne({ username }, (err, user) => {
         if (err) { return done(err); }
         if (!user) {
-            addUser(username, password);
-            return done(null, { message: 'You are registered.' });
+            const salt = bcrypt.genSaltSync(10);
+            const newuser = new User({
+                username,
+                passwordHash: bcrypt.hashSync(password, salt),
+                passwordSalt: salt,
+            });
+            return newuser.save().then(() => done(null, newuser))
+                .catch(() => done(null, false));
         }
         if (user.passwordHash !== bcrypt.hashSync(password, user.passwordSalt)) {
             return done(null, false, { message: 'Incorrect password.' });
@@ -42,8 +47,7 @@ router.post('/', passport.authenticate('local', {
     successFlash: true,
 }), (req, res) => {
     res.cookie('session_id', req.sessionID);
-    if (!req.user.message) res.send({ info: 1, status: 'logged' });
-    else res.send({ info: 2, status: req.user.message });
+    res.send({ info: 1, status: 'logged' });
 });
 
 module.exports = router;
