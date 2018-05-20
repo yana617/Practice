@@ -31,7 +31,6 @@ window.domModule = {
     },
     changeUser(username) {
         if (username === null || typeof username === 'undefined') {
-            this.removeCookie('username');
             document.getElementsByClassName('sign')[0].setAttribute('onclick', 'setLogInPage()');
             document.getElementsByClassName('sign')[0].innerHTML = '<i class="fa fa-sign-in signicon2 fa-3x" aria-hidden="true"></i>';
             document.getElementsByClassName('user-name-short')[0].style.display = 'none';
@@ -45,28 +44,31 @@ window.domModule = {
             document.getElementsByClassName('add-photo')[0].style.display = 'flex';
             const nameShort = document.getElementsByClassName('user-name-short')[0];
             nameShort.style.display = 'flex';
-            nameShort.textContent = this.makeUserNameShort(this.getCookie('username'));
+            nameShort.textContent = this.makeUserNameShort(username);
             const nameFull = document.getElementsByClassName('user-name-full')[0];
             if (document.body.clientWidth < 830) nameFull.style.display = 'none';
             else {
-                if (this.getCookie('username').length > 13) {
+                if (username.length > 13) {
                     nameFull.style.width = '200px';
                     nameShort.style.right = '240px';
                 }
                 nameFull.style.display = 'flex';
-                nameFull.textContent = this.getCookie('username');
+                nameFull.textContent = username;
             }
         }
         return true;
     },
-    getUser() {
-        return this.getCookie('username');
-    },
     setUser() {
-        if (this.getCookie('username') === '') {
+        if (this.getCookie('session_id') === '') {
             this.changeUser(null);
         } else {
-            this.changeUser(this.getCookie('username'));
+            window.myFetch.serverRequest('GET', '/setuser')
+                .then((data) => {
+                    if (data.status === 'ok') {
+                        this.changeUser(data.username);
+                    }
+                })
+                .catch(error => console.log(error));
         }
     },
     setFilter(newFilter) {
@@ -74,12 +76,14 @@ window.domModule = {
     },
     createPost(post) {
         const div = document.createElement('div');
-        div.id = post.id;
+        div.id = post._id;
         div.className = 'post';
         let heart = '<i class="fa fa-heart-o fa-2x" aria-hidden="true"></i>';
-        if (this.getCookie('username') !== '') {
+        let rightUser = null;
+        if (document.querySelector('.user-name-full')) {
+            rightUser = document.querySelector('.user-name-full').textContent;
             post.likes.forEach((elem) => {
-                if (elem === this.getCookie('username')) {
+                if (elem === document.querySelector('.user-name-full').textContent) {
                     heart = '<i class="fa fa-heart fa-2x heart" aria-hidden="true"></i>';
                 }
             });
@@ -116,7 +120,7 @@ window.domModule = {
                 <div class="image-text">
                     <p class="text-info">${post.description}</p>
                 </div>`;
-        if (this.getCookie('username') === post.author) div.innerHTML = isOwner + div.innerHTML;
+        if (rightUser === post.author) div.innerHTML = isOwner + div.innerHTML;
         return div;
     },
     addPost(post) {
@@ -129,9 +133,7 @@ window.domModule = {
                     window.setAgreementPage();
                 }
             })
-            .catch((error) => {
-                console.log(error);
-            });
+            .catch(error => console.log(error));
     },
     sendPhoto(file) {
         const formData = new FormData();
@@ -218,5 +220,5 @@ window.removePhotoPost = (id) => {
     window.domModule.removePost(id);
 };
 
-window.setMainPage();
 window.domModule.setUser();
+window.setMainPage();

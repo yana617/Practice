@@ -4,7 +4,9 @@ window.myFetch = {
             body: JSON.stringify(data),
             headers: {
                 'content-type': 'application/json',
+                'Set-Cookie': 'true',
             },
+            credentials: 'include',
             method,
         }).then((response) => {
             if (response.ok) {

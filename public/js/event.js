@@ -16,6 +16,8 @@ window.agreeOk = () => {
 };
 window.logOut = () => {
     window.domModule.changeUser(null);
+    window.myFetch.serverRequest('PUT', '/logout')
+        .catch(error => console.error(error));
 };
 window.reloadMain = () => {
     document.querySelector('.content').innerHTML = '';
@@ -36,7 +38,6 @@ window.updateImageDisplay = () => {
     }
 };
 window.addPhoto = () => {
-    const author = window.domModule.getUser();
     const likes = [];
     let photoLink;
     const srcLength = document.querySelector('.addphoto-image-size').src.length;
@@ -53,7 +54,6 @@ window.addPhoto = () => {
     const post = {
         description,
         createdAt,
-        author,
         photoLink,
         likes,
         hashtags,
@@ -88,19 +88,19 @@ window.rewatch = (event, child) => {
 window.likeIt = (event, childId) => {
     event.preventDefault();
     const myId = childId.parentNode.parentNode.parentNode.id;
-    if (window.domModule.getUser() === null) {
-        window.setAgreementPageinMain();
+    if (window.domModule.getCookie('session_id') === '') {
+        window.setAgreementPageinMain('Войдите в систему');
     } else {
         let likes = document.getElementById(myId).querySelector('.show-likes').innerHTML.replace(/<br>/g, ' ').trim().split(' ');
         likes = likes.filter(elem => elem.length > 0);
-        if (likes.findIndex(item => item === window.domModule.getUser()) === -1) {
-            likes.push(window.domModule.getUser());
+        if (likes.findIndex(item => item === document.querySelector('.user-name-full').textContent) === -1) {
+            likes.push(document.querySelector('.user-name-full').textContent);
             const newLikes = likes.join('<br>');
             document.getElementById(myId).querySelector('.show-likes').innerHTML = newLikes;
             document.getElementById(myId).querySelector('.heart-div').innerHTML = '<i class="fa fa-heart fa-2x heart" aria-hidden="true"></i>';
             document.getElementById(myId).querySelector('.count-of-likes').textContent = likes.length;
         } else {
-            const index2 = likes.findIndex(elem => elem === window.domModule.getUser());
+            const index2 = likes.findIndex(elem => elem === document.querySelector('.user-name-full').textContent);
             likes.splice(index2, 1);
             if (likes.length > 0) {
                 const newLikes = likes.join('<br>');
@@ -146,4 +146,3 @@ window.setFilterConfig = () => {
     document.querySelector('.content').innerHTML = '';
     window.getPhotoPosts(0, 9, filter);
 };
-

@@ -156,14 +156,15 @@ function logIn(event) {
     const password = formData.get('password');
     window.myFetch.serverRequest('POST', `/login?username=${username}&password=${password}`)
         .then((data) => {
-            window.domModule.setCookie('username', username, 365);
             window.setMainPage();
             window.domModule.changeUser(username);
             if (data.info === 2) {
-                window.setAgreementPageRegistered(data.status);
+                window.setAgreementPageinMain('Вы успешно зарегестрированы!');
             }
         })
-        .catch(() => alert('Неверный пароль'));
+        .catch(() => {
+            window.setAgreementPagePassword();
+        });
 }
 window.setLogInPage = () => {
     document.body.innerHTML = window.getHTML.LogInPage();
@@ -213,17 +214,17 @@ window.setAgreementPage = () => {
     agreement.innerHTML = window.getHTML.AgreePage();
     document.querySelector('.add-main-container').appendChild(agreement);
 };
-window.setAgreementPageinMain = () => {
+window.setAgreementPageinMain = (text) => {
     const agreement = document.createElement('div');
     agreement.className = 'agreement';
     agreement.innerHTML = window.getHTML.AgreePage();
     document.querySelector('.main-container').appendChild(agreement);
-    document.querySelector('.agree-info').textContent = 'Войдите в систему';
+    document.querySelector('.agree-info').textContent = text;
 };
-window.setAgreementPageRegistered = () => {
+window.setAgreementPagePassword = () => {
     const agreement = document.createElement('div');
     agreement.className = 'agreement';
     agreement.innerHTML = window.getHTML.AgreePage();
-    document.querySelector('.main-container').appendChild(agreement);
-    document.querySelector('.agree-info').textContent = 'Вы успешно зарегестрированы!';
+    document.querySelector('.main').appendChild(agreement);
+    document.querySelector('.agree-info').textContent = 'Неверный пароль';
 };

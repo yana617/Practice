@@ -41,8 +41,9 @@ router.post('/', passport.authenticate('local', {
     failureFlash: true,
     successFlash: true,
 }), (req, res) => {
-    if (!req.user.message) res.send(JSON.stringify({ info: 1, status: 'logged' }));
-    else res.send(JSON.stringify({ info: 2, status: req.user.message }));
+    res.cookie('session_id', req.sessionID);
+    if (!req.user.message) res.send({ info: 1, status: 'logged' });
+    else res.send({ info: 2, status: req.user.message });
 });
 
 module.exports = router;
