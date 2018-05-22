@@ -127,17 +127,17 @@ window.filterByEnter = (event) => {
 };
 window.setFilterConfig = () => {
     let filter = {};
-    const authors = document.querySelector('.input1').value.trim().replace(/\s+/g, ' ').split(' ');
+    const author = document.querySelector('.input1').value.trim().replace(/\s+/g, ' ').split(' ');
     const hashtags = document.querySelector('.input2').value.trim().replace(/\s+/g, ' ').split(' ');
     const date = document.querySelector('.input3').value;
-    if (!authors.includes('')) {
-        filter.authors = authors;
+    if (!author.includes('')) {
+        filter.author = author;
     }
     if (!hashtags.includes('')) {
         filter.hashtags = hashtags;
     }
     if (date) {
-        filter.createdAt = new Date(date);
+        filter.shortCreatedAt = date;
     }
     if (JSON.stringify(filter) === '{}') {
         filter = undefined;

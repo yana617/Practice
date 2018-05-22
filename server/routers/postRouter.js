@@ -17,6 +17,7 @@ router.post('/addPhotoPost', (req, res) => {
         const post = new Post({
             author: req.user.username,
             createdAt: new Date(),
+            shortCreatedAt: JSON.stringify(new Date()).substr(1, 10),
             description: newpost.description,
             photoLink: newpost.photoLink,
             hashtags: newpost.hashtags,
@@ -24,7 +25,7 @@ router.post('/addPhotoPost', (req, res) => {
         });
         Post.collection.insertOne(post, (err) => {
             if (err) {
-                res.send('Error DB');
+                res.status(500).end();
             } else {
                 res.send({ status: 'added' });
             }
@@ -36,7 +37,7 @@ router.post('/addPhotoPost', (req, res) => {
 router.get('/getPhotoPost', (req, res) => {
     if (req.query.id && req.session) {
         Post.findById(req.query.id, (err, post) => {
-            if (err) res.send({ status: 'Error' });
+            if (err) res.status(500).end();
             res.send(post);
         });
     } else {
@@ -47,54 +48,27 @@ router.post('/getPhotoPosts', (req, res) => {
     if (req.query.skip && req.query.top) {
         const skip = parseInt(req.query.skip, 10);
         const top = parseInt(req.query.top, 10);
-        const filterConfig = JSON.parse(JSON.stringify(req.body), (key, value) => {
-            if (key === 'createdAt') return new Date(value);
-            return value;
-        });
-        Post.find((err, posts) => {
-            if (err) {
-                res.send('DB-error');
-            } else {
-                posts.reverse();
+        const filterConfig = req.body;
+        if (filterConfig.author) {
+            filterConfig.author = { $in: req.body.author };
+        }
+        if (filterConfig.hashtags) {
+            filterConfig.hashtags = { $all: req.body.hashtags };
+        }
+        Post.find(filterConfig).sort({ createdAt: -1 }).skip(skip).limit(top)
+            .exec((err, posts) => {
+                if (err) res.status(500).end();
                 const result = {};
-                let photoFilterResult = posts;
                 result.pagination = true;
-                if (typeof skip !== 'number' || typeof top !== 'number') {
-                    console.log('typeError in getPhotoPosts');
-                    res.send();
-                }
-                if (!filterConfig) {
-                    if (posts.slice(skip + top).length === 0) {
+                result.posts = posts;
+                return Post.find(filterConfig).count((error, count) => {
+                    if (error) res.status(500).end();
+                    if (count <= skip + top) {
                         result.pagination = false;
                     }
-                    result.posts = posts.slice(skip, skip + top);
-                } else {
-                    if (filterConfig.authors) {
-                        photoFilterResult = photoFilterResult
-                            .filter(elem => filterConfig.authors.includes(elem.author));
-                    }
-                    if (filterConfig.createdAt) {
-                        photoFilterResult = photoFilterResult.filter((elem) => {
-                            const postDate = new Date(elem.createdAt);
-                            return postDate.getDate() === filterConfig.createdAt.getDate() &&
-                                postDate.getMonth() === filterConfig.createdAt.getMonth() &&
-                                postDate.getFullYear() === filterConfig.createdAt.getFullYear();
-                        });
-                    }
-                    if (filterConfig.hashtags) {
-                        photoFilterResult = photoFilterResult.filter(elem => filterConfig.hashtags
-                            .every(tag => elem.hashtags.includes(tag)));
-                    }
-                    if (photoFilterResult.slice(skip, skip + top).length <= 9
-                        && photoFilterResult.slice(skip + top).length === 0) {
-                        result.pagination = false;
-                    }
-                    result.posts = photoFilterResult.slice(skip, skip + top);
-                }
-                res.send(result);
-            }
-            return 0;
-        });
+                    res.send(result);
+                });
+            });
     } else {
         res.status(400).end();
     }
@@ -110,7 +84,7 @@ router.put('/editPhotoPost', (req, res) => {
             const details = { _id: req.query.id };
             Post.update(details, changes, (err) => {
                 if (err) {
-                    res.send({ status: 'not-edited' });
+                    res.status(500).end();
                 } else {
                     res.send({ status: 'edited' });
                 }
@@ -127,7 +101,7 @@ router.delete('/removePhotoPost', (req, res) => {
         const details = { _id: req.query.id };
         Post.remove(details, (err) => {
             if (err) {
-                res.send({ status: 'not-removed' });
+                res.status(500).end();
             }
             res.send({ status: 'removed' });
         });

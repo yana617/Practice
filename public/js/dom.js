@@ -153,6 +153,10 @@ window.domModule = {
         if (filterConfig) {
             filter = filterConfig;
         }
+        if (typeof skip !== 'number' || typeof top !== 'number') {
+            console.log('typeError in getPhotoPosts');
+            return;
+        }
         window.myFetch.serverRequest('POST', `/getPhotoPosts?skip=${skip}&top=${top}`, filter)
             .then((data) => {
                 const posts = JSON.parse(JSON.stringify(data.posts), (key, value) => {

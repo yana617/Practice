@@ -5,23 +5,7 @@ const User = require('../model/User');
 const bcrypt = require('bcrypt');
 
 const router = express.Router();
-/*
-function addUser(username, password) {
-    if (!username || !password) return Promise.reject();
-    return User.findOne({ username })
-        .then((res) => { if (!res) throw res; })
-        .catch(() => {
-            const salt = bcrypt.genSaltSync(10);
-            const user = new User({
-                username,
-                passwordHash: bcrypt.hashSync(password, salt),
-                passwordSalt: salt,
-            });
-            user.save().then(() => done(null, user))
-                .catch(err => console.log(err));
-        });
-}
-*/
+
 passport.use(new LocalStrategy((username, password, done) => {
     User.findOne({ username }, (err, user) => {
         if (err) { return done(err); }
